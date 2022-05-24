@@ -1,11 +1,15 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useGetContactsQuery } from 'services/contactsApi';
 import './Home.css';
 
 const Home: FC = () => {
-   const { data } = useGetContactsQuery();
+   const { data, error } = useGetContactsQuery();
+
+   useEffect(() => {
+      error && toast.error('Error loading contacts. Please try again later.');
+   }, [error]);
 
    const handleDelete = async (id: any) => {
       if (

@@ -4,11 +4,21 @@ import { Contact } from 'interfaces/Contact';
 export const contactsApi = createApi({
    reducerPath: 'contactsApi',
    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
+   tagTypes: ['Contact'],
    endpoints: (builder) => ({
       getContacts: builder.query<Contact[], void>({
          query: () => '/contacts',
+         providesTags: ['Contact'],
+      }),
+      addContact: builder.mutation<{}, Contact>({
+         query: (contact) => ({
+            url: '/contacts',
+            method: 'POST',
+            body: contact,
+         }),
+         invalidatesTags: ['Contact'],
       }),
    }),
 });
 
-export const { useGetContactsQuery } = contactsApi;
+export const { useGetContactsQuery, useAddContactMutation } = contactsApi;
