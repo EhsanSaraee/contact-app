@@ -3,7 +3,11 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useAddContactMutation } from 'services/contactsApi';
+import {
+   useAddContactMutation,
+   useGetContactQuery,
+   useUpdateContactMutation,
+} from 'services/contactsApi';
 import './AddEditUser.css';
 
 const initialState = {
@@ -19,14 +23,18 @@ const AddEditUser: FC = () => {
    const navigate = useNavigate();
    const { id } = useParams();
    const [addContact] = useAddContactMutation();
+   const [updateContact] = useUpdateContactMutation();
+   const { data } = useGetContactQuery(id!);
 
    useEffect(() => {
       if (id) {
          setEditMode(true);
+         data && setFormValue({ ...data });
       } else {
          setEditMode(false);
+         setFormValue({ ...initialState });
       }
-   }, [id]);
+   }, [id, data]);
 
    const handleSubmit = async (e: any) => {
       e.preventDefault();
@@ -38,6 +46,7 @@ const AddEditUser: FC = () => {
             navigate('/');
             toast.success('Contact Added Successfully');
          } else {
+            await updateContact(formValue);
             navigate('/');
             setEditMode(false);
             toast.success('Contact Updated Successfully');
