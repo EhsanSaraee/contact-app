@@ -1,30 +1,12 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useGetContactsQuery } from 'services/contactsApi';
 import './Home.css';
 
-const data = [
-   {
-      name: 'Adam Marcus',
-      email: 'adam123@gmail.com',
-      contact: '83673677367635',
-      id: 1,
-   },
-   {
-      name: 'Tom Cruise',
-      email: 'tom@gmail.com',
-      contact: '83786646476',
-      id: 2,
-   },
-   {
-      name: 'James Bond',
-      email: 'james@gmail.com',
-      contact: '9484785787',
-      id: 3,
-   },
-];
-
 const Home: FC = () => {
+   const { data } = useGetContactsQuery();
+
    const handleDelete = async (id: any) => {
       if (
          window.confirm('Are you sure that you wanted to delete that user ?')
