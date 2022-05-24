@@ -1,11 +1,15 @@
 import { FC, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useGetContactsQuery } from 'services/contactsApi';
+import {
+   useDeleteContactMutation,
+   useGetContactsQuery,
+} from 'services/contactsApi';
 import './Home.css';
 
 const Home: FC = () => {
    const { data, error } = useGetContactsQuery();
+   const [deleteContact] = useDeleteContactMutation();
 
    useEffect(() => {
       error && toast.error('Error loading contacts. Please try again later.');
@@ -15,6 +19,7 @@ const Home: FC = () => {
       if (
          window.confirm('Are you sure that you wanted to delete that user ?')
       ) {
+         await deleteContact(id);
          toast.success('Contact Deleted Successfully');
       }
    };

@@ -1,9 +1,16 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useGetContactQuery } from 'services/contactsApi';
 import './UserInfo.css';
 
 const UserInfo: FC = () => {
    const { id } = useParams();
+   const { data, error } = useGetContactQuery(id!);
+
+   useEffect(() => {
+      error && toast.error('Error loading contact');
+   }, [error]);
 
    return (
       <div style={{ marginTop: '150px' }}>
@@ -13,19 +20,19 @@ const UserInfo: FC = () => {
             </div>
             <div className="container">
                <strong>ID: </strong>
-               <span>1</span>
+               <span>{id}</span>
                <br />
                <br />
                <strong>Name: </strong>
-               <span>Test</span>
+               <span>{data?.name}</span>
                <br />
                <br />
                <strong>Email: </strong>
-               <span>test@gmail.com</span>
+               <span>{data?.email}</span>
                <br />
                <br />
                <strong>Contact: </strong>
-               <span>775675673</span>
+               <span>{data?.contact}</span>
                <br />
                <br />
                <Link to="/">
